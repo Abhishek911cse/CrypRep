@@ -260,28 +260,28 @@ class DES:
         """
         return '{0:0{1}x}'.format(int(''.join([str(bit) for bit in bit_array]), 2), length if fixed_length else 0).upper()
     
-    def run_des(msg, password, action):
-        des_run = {'Values': [],
-                        'Keys': [],
-                        'Cipher': None
-                        }
-        des = DES()
-        code = des.run(msg, password, action)
+def run_des(msg, password, action):
+    des_run = {'Values': [],
+               'Keys': [],
+               'Cipher': None
+               }
+    des = DES()
+    code = des.run(msg, password, action)
 
-        des_run['Cipher'] = des.bin_2_formatted_hex(code, fixed_length=False)
-        des_run['Keys'] = [des.bin_2_formatted_hex(des_key, length=12) for des_key in des.keys]
-        des_run['Keys'].insert(0, '-')
+    des_run['Cipher'] = des.bin_2_formatted_hex(code, fixed_length=False)
+    des_run['Keys'] = [des.bin_2_formatted_hex(des_key, length=12) for des_key in des.keys]
+    des_run['Keys'].insert(0, '-')
 
-        for foo in range(len(des.rounds)):
-            bits = des.rounds[foo][0]
-            initial_round = des.bin_2_formatted_hex(bits)
+    for foo in range(len(des.rounds)):
+        bits = des.rounds[foo][0]
+        initial_round = des.bin_2_formatted_hex(bits)
 
-            des_run['Values'].append({'left_rounds': [initial_round[:8]],
-                                      'right_rounds': [initial_round[8:]]})
-            for i in range(16):
-                des_round = des.bin_2_formatted_hex(des.rounds[foo][i + 1])
-                des_run['Values'][foo]['left_rounds'].append(des_round[:8])
-                des_run['Values'][foo]['right_rounds'].append(des_round[8:])
+        des_run['Values'].append({'left_rounds': [initial_round[:8]],
+                                  'right_rounds': [initial_round[8:]]})
+        for i in range(16):
+            des_round = des.bin_2_formatted_hex(des.rounds[foo][i + 1])
+            des_run['Values'][foo]['left_rounds'].append(des_round[:8])
+            des_run['Values'][foo]['right_rounds'].append(des_round[8:])
 
-        return des_run
+    return des_run
 
