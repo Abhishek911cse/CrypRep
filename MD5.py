@@ -167,5 +167,5 @@ if __name__ == "__main__":
     for msg in demo:
         hash = MD5().get_md5_hash(msg)
         # print('{0} - {1}'.format(MD5().get_md5_hash(msg), msg))
-        print(*hash["message_blocks"], sep="\n")
-        print(*hash["operations"], sep="\n")
+        print(*hash["hash"], sep="\n")
+        # print(*hash["operations"], sep="\n")
