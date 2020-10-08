@@ -47,194 +47,188 @@ class AES:
         : param i: Round key sequence number
         : return : Round key with applied T function 
         """
+        
         #Substitute bytes with corresponding bytes from SBOX after performing single left shift:
         w = [self.get_sbox_value(foo) for foo in numpy.roll(w, -1)]
-        # Perform XOR operation between 1 st value and round constant: #Round constant value is taken from RCON list
-    w[0] = int(w[0]) ^ RCON[int(i / 4) - 1]
-return w
-def generate_round_keys(self, key):
-    ""
-"
-Generates all round keys
-    : return :Array of all round keys(rounds 0 - 10) with ""
-"#
-Get initial round 4 keys by splitting main key:
-    all_keys = self.split_array(key, 4)# Perform operations
-for the next 40 keys:
-    for i in range(4, 44): #Get 1 st key
-for new key generation:
-    w1 = all_keys[i - 4]# Get 2n d key
-for key generation: #If it 's sequence number is 4 multiple, perform T function on it,#
-else select key according to the rules
-w2 = self.t_function(all_keys[i - 1], i) if i % 4 == 0
-else all_keys[i - 1]
-all_keys.append([w1[foo] ^ w2[foo]
-    for foo in range(4)
-])
-return self.split_array(all_keys, 4)
-@staticmethod
-def flip_matrix(key): #Switches rows with columns in 4 x4 matrix
-new_key = [
-    [0
-        for foo in range(4)
-    ]
-    for bar in range(4)
-]
-for foo in range(len(key)):
-    for bar in range(len(key[foo % 4])):
-    new_key[bar][foo % 4] = key[foo % 4][bar]
-return new_key
-@staticmethod
-def bit_multiplication(number, multiplier):
-    ""
-"
-Performs AES arithmetic to multiply numbers
-    : param number: number from shifted matrix: param multiplier: corresponding number from MIX_MATRIX: return :Number with applied AES arithmetic ""
-"
-num_string = '{0:08b}'.format(number)# Convert number to 8 bit string
-new_num = int(num_string[1: ] + '0', 2)# Perform left shift and add 0 to the end
-if multiplier == 0x02: #Multiplication of a value by 2 can be implemented as a 1 - bit left shift, #
-    if the leftmost bit of the original value(before the shift) is 1, #it should be followed by a conditional bitwise XOR with(0001 1011)
-return new_num ^ 0b11011
-if num_string[0] == '1'
-else new_num
-elif multiplier == 0x03: #Multiplication by 3 can be achieved by performing XOR operation# between value of number multiplied by 2 and original value
-return (new_num ^ 0b11011
-    if num_string[0] == '1'
-    else new_num) ^ number
-else :#Multiplication by 1 leaves number unchanged
-return number
-def mix_columns(self, text): #Define new 4 x4 matrix to store values
-mixed_columns = [
-    [0
-        for a in range(4)
-    ]
-    for b in range(4)
-]# Fill matrix by going through text and mix arrays and performing AES multiplication operation
-for col in range(4):
-    for row in range(4):
-    for i in [self.bit_multiplication(text[i][col], MIX_MATRIX[row][i]) for i in range(4)]:
-    mixed_columns[row][col] ^= i
-return mixed_columns
-def apply_round_key(self, cipher, round_key): #Perform XOR operations between corresponding(those whose coordinates match)# members in cipher and round key:
-    return [
-        [cipher[foo][bar] ^ self.flip_matrix(round_key)[foo][bar]
-            for bar in range(4)
-        ]
-        for foo in range(4)
-    ]
-def do_rounds(self, message, key): #generate round keys:
-    keys = self.generate_round_keys(key)# Set dictionary structure
-for output:
-    output = {
-        'message': ' '.join([self.formatted_hex(foo) for foo in message]),
-        'key': self.format_output(keys[0], output_type = 'line'),
-        'cipher': None,
-        'round_values': []
-    }
-message_blocks = self.flip_matrix(self.split_array(message, 4))
-block = self.apply_round_key(message_blocks, keys[0])
-output['round_values'].append({
-    'round_no': 0,
-    'key': self.format_output(keys[0]),
-    'sub_bytes': '-',
-    'shift_rows': '-',
-    'mix_cols': '-',
-    'apply_round_key': self.format_output(block)
-})
-for round_no in range(1, len(keys)):
-    round_output = {
-        'round_no': round_no,
-        'key': None,
-        'sub_bytes': None,
-        'shift_rows': None,
-        'mix_cols': None,
-        'apply_round_key': None
-    }
-round_output['key'] = self.format_output(keys[round_no])# Substitutes values with corresponding ones from SBOX:
-    block = [
-        [self.get_sbox_value(foo) for foo in bar]
-        for bar in block
-    ]
-round_output['sub_bytes'] = self.format_output(block)# Shifts rows cyclically to the left by offsets of 0, 1, 2 and 3:
-    block = [
-        [int(foo) for foo in numpy.roll(block[i], -1 * i)]
-        for i in range(len(block))
-    ]
-round_output['shift_rows'] = self.format_output(block)# Perform mix columns operation
-for rounds 1 - 9:
-    if round_no < 10:
-    block = self.mix_columns(block)
-round_output['mix_cols'] = self.format_output(block)
-else :
-    round_output['mix_cols'] = '-'#
-Apply round key:
-    block = self.apply_round_key(block, keys[round_no])
-round_output['apply_round_key'] = self.format_output(block)
-output['round_values'].append(round_output)# Format final cipher text:
-    output['cipher'] = self.format_output(self.flip_matrix(block), output_type = 'line')
-return output
-@staticmethod
-def formatted_hex(num):
-    return '{0:#04x}'.format(num)[2: ].upper()
-def format_output(self, data_array, output_type = 'matrix'):
-    if output_type == 'matrix':
-    return '\n'.join([' '.join([self.formatted_hex(foo) for foo in bar]) for bar in data_array])
-elif output_type == 'line':
-    return ' '.join([' '.join([self.formatted_hex(foo) for foo in bar]) for bar in data_array])
-else :
-    raise ValueError('Not valid variable type')
-def get_hex_array(string):
-    return [int(string[i: i + 2], 16) for i in range(0, len(string), 2)]
-def test_aes():
-    key = [0x54, 0x68, 0x61, 0x74,
-        0x73, 0x20, 0x6d, 0x79,
-        0x20, 0x4b, 0x75, 0x6e,
-        0x67, 0x20, 0x46, 0x75
-    ]
-key4 = [0x54, 0x68, 0x61, 0x74,
-    0x73, 0x20, 0x6d, 0x79,
-    0x20, 0x4b, 0x75, 0x6e,
-    0x67, 0x20, 0x46, 0x75
-]
-key1 = [0x23, 0x34, 0x45, 0x67,
-    0x89, 0x9a, 0xab, 0xbc,
-    0xcd, 0xde, 0xef, 0xf1,
-    0x10, 0x00, 0x02, 0x03
-]
-text = [0x54, 0x77, 0x6f, 0x20,
-    0x4f, 0x6e, 0x65, 0x20,
-    0x4e, 0x69, 0x6e, 0x65,
-    0x20, 0x54, 0x77, 0x6f
-]
-text2 = [0x87, 0xf2, 0x4d, 0x97,
-    0xec, 0x6e, 0x4c, 0x90,
-    0x4a, 0xc3, 0x46, 0xe7,
-    0x8c, 0xd8, 0x95, 0xa6
-]
-text3 = [0xd4, 0xf2, 0x4d, 0x97,
-    0xec, 0xbf, 0x4c, 0x90,
-    0x4a, 0xc3, 0x5d, 0xe7,
-    0x8c, 0xd8, 0x95, 0x30
-]
-aes = AES()
-aes.key = get_hex_array('1101020359aaabbccddeefff10000203')
-aes.message = text2
-od = aes.do_rounds(text, get_hex_array('1101020359aaabbccddeefff10000203'))
-print('Message: {0}\nKey: {1}\nCipher: {2}'.format(od['message'], od['key'], od['cipher']))
-for aes_round in od['round_values']:
-    print(
-        'Round #: {0}\nSubstitute bytes:\n{1}\nShift rows: \n{2}\nMix columns:\n{3}\nafter roundkey:\
-        n {
-            4
+        # Perform XOR operation between 1 st value and round constant: 
+        # Round constant value is taken from RCON list
+        w[0] = int(w[0]) ^ RCON[int(i / 4) - 1]
+        return w
+
+    def generate_round_keys(self, key):
+        """
+        Generates all round keys
+        : return :Array of all round keys(rounds 0 - 10) with 
+        """
+        # Get initial round 4 keys by splitting main key:
+        all_keys = self.split_array(key, 4)
+        # Perform operations for the next 40 keys:
+        for i in range(4, 44): 
+            # Get 1st key for new key generation:
+            w1 = all_keys[i - 4]
+            # Get 2nd key for key generation: 
+            #If it 's sequence number is 4 multiple, perform T function on it,
+            # else select key according to the rules
+            w2 = self.t_function(all_keys[i - 1], i) if i % 4 == 0 else all_keys[i - 1]
+            
+            all_keys.append([w1[foo] ^ w2[foo] for foo in range(4)])
+        return self.split_array(all_keys, 4)
+    @staticmethod
+    def flip_matrix(key): 
+        # Switches rows with columns in 4 x4 matrix
+        new_key = [[0 for foo in range(4)]for bar in range(4)]
+        for foo in range(len(key)):
+            for bar in range(len(key[foo % 4])):
+                new_key[bar][foo % 4] = key[foo % 4][bar]
+        return new_key
+    
+    @staticmethod
+    def bit_multiplication(number, multiplier):
+        """
+        Performs AES arithmetic to multiply numbers
+        : param number: number from shifted matrix
+        : param multiplier: corresponding number from MIX_MATRIX
+        : return :Number with applied AES arithmetic 
+        """
+        num_string = '{0:08b}'.format(number)# Convert number to 8 bit string
+        new_num = int(num_string[1: ] + '0', 2)# Perform left shift and add 0 to the end
+
+        if multiplier == 0x02: 
+            # Multiplication of a value by 2 can be implemented as a 1 - bit left shift, 
+            # if the leftmost bit of the original value(before the shift) is 1, 
+            # it should be followed by a conditional bitwise XOR with(0001 1011)
+            return new_num ^ 0b11011 if num_string[0] == '1' else new_num
+        elif multiplier == 0x03: 
+            # Multiplication by 3 can be achieved by performing XOR operation
+            # between value of number multiplied by 2 and original value
+            return (new_num ^ 0b11011 if num_string[0] == '1' else new_num) ^ number
+        else:
+            # Multiplication by 1 leaves number unchanged
+            return number
+
+    def mix_columns(self, text): 
+        #Define new 4 x4 matrix to store values
+        mixed_columns = [[0 for a in range(4)]for b in range(4)]
+        # Fill matrix by going through text and mix arrays and performing AES multiplication operation
+        for col in range(4):
+            for row in range(4):
+                for i in [self.bit_multiplication(text[i][col], MIX_MATRIX[row][i]) for i in range(4)]: mixed_columns[row][col] ^= i
+        return mixed_columns
+
+    def apply_round_key(self, cipher, round_key): #Perform XOR operations between corresponding(those whose coordinates match)# members in cipher and round key:
+        return [[cipher[foo][bar] ^ self.flip_matrix(round_key)[foo][bar]for bar in range(4)]for foo in range(4)]
+
+
+    def do_rounds(self, message, key): 
+        #generate round keys:
+        keys = self.generate_round_keys(key)
+        # Set dictionary structure for output:
+        output = {
+            'message': ' '.join([self.formatted_hex(foo) for foo in message]),
+            'key': self.format_output(keys[0], output_type = 'line'),
+            'cipher': None,
+            'round_values': []
         }
-        ''
-        '.format(
-        aes_round['round_no'],
-        aes_round['sub_bytes'],
-        aes_round['shift_rows'],
-        aes_round['mix_cols'],
-        aes_round['apply_round_key']))
-print('-------------- End of Round --------------')
+        message_blocks = self.flip_matrix(self.split_array(message, 4))
+        block = self.apply_round_key(message_blocks, keys[0])
+        output['round_values'].append({
+            'round_no': 0,
+            'key': self.format_output(keys[0]),
+            'sub_bytes': '-',
+            'shift_rows': '-',
+            'mix_cols': '-',
+            'apply_round_key': self.format_output(block)
+        })
+        for round_no in range(1, len(keys)):
+            round_output = {
+                'round_no': round_no,
+                'key': None,
+                'sub_bytes': None,
+                'shift_rows': None,
+                'mix_cols': None,
+                'apply_round_key': None
+            }
+        round_output['key'] = self.format_output(keys[round_no])
+        # Substitutes values with corresponding ones from SBOX:
+        block = [[self.get_sbox_value(foo) for foo in bar] for bar in block]
+        round_output['sub_bytes'] = self.format_output(block)
+        # Shifts rows cyclically to the left by offsets of 0, 1, 2 and 3:
+        block = [[int(foo) for foo in numpy.roll(block[i], -1 * i)]for i in range(len(block))]
+        round_output['shift_rows'] = self.format_output(block)
+        # Perform mix columns operation for rounds 1 - 9:
+        if round_no < 10:
+            block = self.mix_columns(block)
+            round_output['mix_cols'] = self.format_output(block)
+        else :
+            round_output['mix_cols'] = '-'
+        # Apply round key:
+        block = self.apply_round_key(block, keys[round_no])
+        round_output['apply_round_key'] = self.format_output(block)
+        output['round_values'].append(round_output)
+        # Format final cipher text:
+        output['cipher'] = self.format_output(self.flip_matrix(block), output_type = 'line')
+        return output
+
+    @staticmethod
+    def formatted_hex(num):
+        return '{0:#04x}'.format(num)[2: ].upper()
+    
+    def format_output(self, data_array, output_type = 'matrix'):
+        if output_type == 'matrix':
+            return '\n'.join([' '.join([self.formatted_hex(foo) for foo in bar]) for bar in data_array])
+        elif output_type == 'line':
+            return ' '.join([' '.join([self.formatted_hex(foo) for foo in bar]) for bar in data_array])
+        else :
+            raise ValueError('Not valid variable type')
+    
+    def get_hex_array(self, string):
+        return [int(string[i: i + 2], 16) for i in range(0, len(string), 2)]
+    
+    def test_aes():
+        key = [0x54, 0x68, 0x61, 0x74,
+            0x73, 0x20, 0x6d, 0x79,
+            0x20, 0x4b, 0x75, 0x6e,
+            0x67, 0x20, 0x46, 0x75
+        ]
+        key4 = [0x54, 0x68, 0x61, 0x74,
+            0x73, 0x20, 0x6d, 0x79,
+            0x20, 0x4b, 0x75, 0x6e,
+            0x67, 0x20, 0x46, 0x75
+        ]
+        key1 = [0x23, 0x34, 0x45, 0x67,
+            0x89, 0x9a, 0xab, 0xbc,
+            0xcd, 0xde, 0xef, 0xf1,
+            0x10, 0x00, 0x02, 0x03
+        ]
+        text = [0x54, 0x77, 0x6f, 0x20,
+            0x4f, 0x6e, 0x65, 0x20,
+            0x4e, 0x69, 0x6e, 0x65,
+            0x20, 0x54, 0x77, 0x6f
+        ]
+        text2 = [0x87, 0xf2, 0x4d, 0x97,
+            0xec, 0x6e, 0x4c, 0x90,
+            0x4a, 0xc3, 0x46, 0xe7,
+            0x8c, 0xd8, 0x95, 0xa6
+        ]
+        text3 = [0xd4, 0xf2, 0x4d, 0x97,
+            0xec, 0xbf, 0x4c, 0x90,
+            0x4a, 0xc3, 0x5d, 0xe7,
+            0x8c, 0xd8, 0x95, 0x30
+        ]
+        aes = AES()
+        aes.key = get_hex_array('1101020359aaabbccddeefff10000203')
+        aes.message = text2
+
+        od = aes.do_rounds(text, get_hex_array('1101020359aaabbccddeefff10000203'))
+        print('Message: {0}\nKey: {1}\nCipher: {2}'.format(od['message'], od['key'], od['cipher']))
+        for aes_round in od['round_values']:
+            print(
+                'Round #: {0}\nSubstitute bytes:\n{1}\nShift rows: \n{2}\nMix columns:\n{3}\nafter roundkey:\n{4}'''.format(
+                 aes_round['round_no'],
+                 aes_round['sub_bytes'],
+                 aes_round['shift_rows'],
+                 aes_round['mix_cols'],
+                 aes_round['apply_round_key']))
+            print('-------------- End of Round --------------')
 if __name__ == '__main__':
     test_aes()
