@@ -181,10 +181,10 @@ class AES:
         else :
             raise ValueError('Not valid variable type')
     
-    def get_hex_array(self, string):
-        return [int(string[i: i + 2], 16) for i in range(0, len(string), 2)]
-    
-    def test_aes():
+def get_hex_array(string):
+    return [int(string[i: i + 2], 16) for i in range(0, len(string), 2)]
+
+def test_aes():
         key = [0x54, 0x68, 0x61, 0x74,
             0x73, 0x20, 0x6d, 0x79,
             0x20, 0x4b, 0x75, 0x6e,
@@ -230,5 +230,6 @@ class AES:
                  aes_round['mix_cols'],
                  aes_round['apply_round_key']))
             print('-------------- End of Round --------------')
+    
 if __name__ == '__main__':
     test_aes()
