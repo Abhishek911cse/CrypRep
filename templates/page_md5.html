@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ 'MD5 Hash example' }}
+{% endblock %}
+{% block content %}
+
+    {% set link='MD5' %}
+    {% include 'navbar.html' %}
+
+
+    <body id="page-top">
+    <div class="container">
+        <h1 class="mt-5">MD5 algorithm example</h1>
+        <p class="lead">This is meant to be used as an educational tool not as actual encryption software</p>
+        <form action="/md5/" method="post">
+            <div class="form-group row">
+                <label for="message" class="col-2 col-form-label">Message</label>
+                <div class="col-10">
+                    <input class="form-control" value="{{ message if message else 'ABCD' }}" name="message" >
+                </div>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="action_options" value="all_steps" checked> Show All Steps</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="action_options" value="no_steps"> Calculate Hash Only</label>
+            </div>
+            <div class="form-group row">
+                <label for="hash" class="col-2 col-form-label"><b>Hash:</b></label>
+                <div class="col-10">
+                    <input class="form-control" value="{{ hash if hash }}" name="hash" disabled>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <input class="btn btn-success btn-lg" type='submit'>
+            </div>
+        </form>
+        <br>
+        {% if show_all %}
+            <h4>Table 'T' (constants):</h4>
+            <table class="table table-bordered">
+                {% for foo in range(0, operations_data.t_table|length, 8) %}
+                    <tr>
+                        {% for bar in range(foo, foo + 8) %}
+                            <td>{{ operations_data.t_table[bar] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h4>Table 's' (round shifts):</h4>
+            <table class="table table-bordered">
+                {% for foo in range(0, operations_data.s_table|length, 8) %}
+                    <tr>
+                        {% for bar in range(foo, foo + 8) %}
+                            <td>{{ operations_data.s_table[bar] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h4>Initial values (MDBUFFER):</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <td>A:</td>
+                    <td>67452301</td>
+                </tr>
+                <tr>
+                    <td>B:</td>
+                    <td>efcdab89</td>
+                </tr>
+                <tr>
+                    <td>C:</td>
+                    <td>98badcfe</td>
+                </tr>
+                <tr>
+                    <td>D:</td>
+                    <td>10325476</td>
+                </tr>
+            </table>
+
+            <h4>Message Blocks:</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Original Length:</td>
+                    <td>{{ operations_data.length }} bits</td>
+                    <td> {{ (operations_data.length / 8)|int }} bytes</td>
+                </tr>
+                <tr>
+                    <td>Length After Padding:</td>
+                    <td>{{ (operations_data.length_after_padding * 8)|int }} bits</td>
+                    <td>{{ operations_data.length_after_padding }} bytes</td>
+                </tr>
+                <tr>
+                    <td>Number of Blocks:</td>
+                    <td colspan="2">{{ (operations_data.length_after_padding/64)|int }}</td>
+                </tr>
+            </table>
+            {% for foo in range(operations_data.message_blocks_hex|length) %}
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="3">Block #{{ foo }} contains:</th>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Value (hex bytes)</th>
+                        <th>Value (int)</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    {% for bar in range(operations_data.message_blocks_hex[foo]|length) %}
+                        <tr>
+                            <td>{{ bar }}</td>
+                            <td>{{ operations_data.message_blocks_hex[foo][bar] }}</td>
+                            <td>{{ operations_data.message_blocks_int[foo][bar] }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            {% endfor %}
+            <h4>MD5 Operations:</h4>
+            <table class="table table-bordered">
+                {% for foo in range(operations_data.operations|length) %}
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="5">Block #{{ foo }}:</th>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bar in range(operations_data.operations[foo]|length) %}
+
+                        {% if bar == 64 %}
+                            <tr class="table-secondary">
+                                <td>Processed:</td>
+                                {% else %}
+                            <tr>
+                            <td>{{ bar }}</td>
+                        {% endif %}
+
+                    {% for value in operations_data.operations[foo][bar] %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                {% endfor %}
+                <tfoot class="table-success">
+                <tr>
+                    <td><b>Hash:</b></td>
+                    <td colspan="4"><b>{{ operations_data.hash }}</b></td>
+                </tr>
+                </tfoot>
+            </table>
+
+        {% endif %}
+
+        {% if error_no=='1' %}
+            <div class="col-lg-12 text-center mt-5">
+                <label class="col-lg-10 col-form-label alert-danger">You must fill in all fields</label>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+

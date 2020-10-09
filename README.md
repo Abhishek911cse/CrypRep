@@ -1,9 +1,7 @@
-# CrypRep
+# NetworkSecurityProject
+# Encryption and Decryption Algorithms
+This Repo consists of Project we made for Network Security in UG Curriculum
 
-Repository containing the source code for the cyber security algorithms showcased on our website.
-
-Team Members:
-- Atharva Girish Ramgirkar
-- Siddarth Gandhi
-- Srishti V
-- Vaishnav Srinidhi
+## This is a Flask based web application
+### We plan to add more encryption algorithms like RSA, AES, MD5 later on ###Added
+### We plan to add even more powerful methods later on

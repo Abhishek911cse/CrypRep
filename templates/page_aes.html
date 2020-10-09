@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ 'AES Encryption example' }}
+{% endblock %}
+
+{% block content %}
+
+{% set link='AES' %}
+{% include 'navbar.html' %}}
+
+<body id="page-top">
+<div class="container">
+    <h1 class="mt-5">AES algorithm example</h1>
+    <p class="lead">This is meant to be used as an educational tool not as actual encryption software</p>
+    <p class="lead">Message and key should be 32 characters long and written in hex (if you want to write 1, you should write 01)</p>
+    <form action="/aes/" method="post">
+        <div class="form-group row">
+
+
+            <label for="message" class="col-2 col-form-label">Message</label>
+            <div class="col-10">
+                <input class="form-control" type="text" value="{{ message if message else '54776F204F6E65204E696E652054776F' }}" name="message" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="key" class="col-2 col-form-label">Key</label>
+            <div class="col-10">
+                <input class="form-control" type="text" value="{{ key if key else '5468617473206D79204B756E67204675' }}" name="key" required>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <input class="btn btn-success btn-lg" type='submit'>
+        </div>
+    </form>
+    <br>
+
+    {% if error_no=='1' %}
+        <div class="col-lg-12 text-center mt-5">
+            <label class="col-lg-10 col-form-label alert-danger">You must fill in all fields</label>
+        </div>
+
+    {% elif error_no=='2' %}
+        <div class="col-lg-12 text-center mt-5">
+            <label class="col-lg-10 col-form-label alert-danger">Key is not a hexadecimal integer</label>
+        </div>
+
+    {% elif error_no=='3' %}
+        <div class="col-lg-12 text-center mt-5">
+            <label class="col-lg-10 col-form-label alert-danger">Message is not a hexadecimal integer</label>
+        </div>
+    {% endif %}
+
+
+
+    {% if errors %}
+        {% for error in errors %}
+            <div class="col-lg-12 text-center mt-5">
+                <label class="col-lg-10 col-form-label alert-danger">{{ error }}</label>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+
+    {% if data %}
+
+    <h4>AES Encryption:</h4>
+    <table class="table">
+
+        <tr>
+            <td>Message (hex):</td>
+            <td><b>{{ message }}</b></td>
+        </tr>
+        <tr>
+            <td>Key:</td>
+            <td><b>{{ key }}</b></td>
+        </tr>
+
+
+    </table>
+
+    <br>
+
+    <!-- <table class="table table-bordered">
+
+        <thead class="thead-dark text-center">
+        <tr>
+            <th scope="col">Round</th>
+            <th scope="col">Round Key</th>
+            <th scope="col">Sub Bytes</th>
+            <th scope="col">Shift Rows</th>
+            <th scope="col">Mix Columns</th>
+            <th scope="col">Applied Round Key</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for foo in data.round_values %}
+        <tr>
+            <td>{{ foo.round_no }}</td>
+            {% autoescape false %}
+            <td align="center">{{ foo.key | replace('\n','<br>') }}</td>
+            <td align="center">{{ foo.sub_bytes | replace('\n','<br>') }}</td>
+            <td align="center">{{ foo.shift_rows | replace('\n','<br>') }}</td>
+            <td align="center">{{ foo.mix_cols | replace('\n','<br>') }}</td>
+            <td align="center">{{ foo.apply_round_key | replace('\n','<br>') }}</td>
+            {% endautoescape %}
+        </tr>
+        {% endfor %}
+        </tbody>
+
+        <tfoot>
+        <tr class="table-secondary">
+            <td><b>Cipher:</b></td>
+            <td colspan="5"><b>{{ data.cipher }}</b></td>
+        </tr>
+        </tfoot>
+    </table> -->
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}
+

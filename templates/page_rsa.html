@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ 'RSA Encryption example' }}
+{% endblock %}
+{% block content %}
+
+    {% set link='RSA' %}
+    {% include 'navbar.html' %}
+
+
+    <body id="page-top">
+    <div class="container">
+        <h1 class="mt-5">RSA algorithm example</h1>
+        <p class="lead">This is meant to be used as an educational tool not as actual encryption software</p>
+        <p class="lead">In this example only decimal numbers are used</p>
+        <form action="/rsa/" method="post">
+            <div class="form-group row">
+
+
+                <label for="message" class="col-2 col-form-label">Message</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" value="{{ message if message else '1314' }}" name="message" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="key" class="col-2 col-form-label">E</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" value="{{ e if e else '343' }}" name="e" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="key" class="col-2 col-form-label">P (Prime number)</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" value="{{ p if p else '397' }}" name="p" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="key" class="col-2 col-form-label">Q (Prime number)</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" value="{{ q if q else '401' }}" name="q" required>
+                </div>
+            </div>
+            <p class="lead">Choose action</p>
+            <div class="radio">
+                <label><input type="radio" name="action_options" value="encrypt"> Encrypt</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="action_options" value="decrypt"> Decrypt</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="action_options" value="both" checked> Encrypt and Decrypt</label>
+            </div>
+            <br>
+            <div class="col-lg-10">
+                <input class="btn btn-success btn-lg" type='submit'>
+            </div>
+        </form>
+        <br>
+
+        {% if error_no=='1' %}
+            <div class="col-lg-12 text-center mt-5">
+                <label class="col-lg-10 col-form-label alert-danger">You must fill in all fields</label>
+            </div>
+
+        {% elif error_no=='2' %}
+            <div class="col-lg-12 text-center mt-5">
+                <label class="col-lg-10 col-form-label alert-danger">{{ number }} is not prime!</label>
+            </div>
+        {% elif error_no=='3' %}
+            <div class="col-lg-12 text-center mt-5">
+                <label class="col-lg-10 col-form-label alert-danger">{{ number }} is not relatively prime to p and q</label>
+            </div>
+        {% endif %}
+
+        {% if rsa %}
+
+            <h4>Entered data:</h4>
+            <table class="table table-bordered">
+
+                <tr>
+                    <td>Message:</td>
+                    <td><b>{{ message }}</b></td>
+                </tr>
+                <tr>
+                    <td>E:</td>
+                    <td><b>{{ e }}</b></td>
+                </tr>
+                <tr>
+                    <td>P:</td>
+                    <td><b>{{ p }}</b></td>
+                </tr>
+                <tr>
+                    <td>Q:</td>
+                    <td><b>{{ q }}</b></td>
+                </tr>
+
+
+                {% if rsa.cipher %}
+
+                    <tr class="table-secondary">
+                        <td>Encrypted Value:</td>
+                        <td><b>{{ rsa.cipher }}</b></td>
+                    </tr>
+
+                {% endif %}
+
+                {% if rsa.d %}
+
+                    <tr class="table-secondary">
+                        <td>D:</td>
+                        <td><b>{{ rsa.d }}</b></td>
+                    </tr>
+                {% endif %}
+
+                {% if rsa.message %}
+                    <tr class="table-secondary">
+                        <td>Decrypted Value:</td>
+                        <td><b>{{ rsa.message }}</b></td>
+                    </tr>
+
+                {% endif %}
+            </table>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
