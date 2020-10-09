@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
-from Crypto_Examples.DES import run_des
-from Crypto_Examples.AES import AES
-from Crypto_Examples.RSA import RSA
-from Crypto_Examples.MD5 import MD5
+from Algorithms.DES import run_des
+from Algorithms.AES import AES
+from Algorithms.RSA import RSA
+from Algorithms.MD5 import MD5
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -176,11 +176,11 @@ def md5_page():
 
         # if message is not None:
         hash = MD5().get_md5_hash(message)
-        # if action == 'all_steps':
-        #     return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
-        #                            operations_data=hash)
-        # else:
-        return render_template('page_md5.html', message=message, hash=hash['hash'])
+        if action == 'all_steps':
+            return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
+                                   operations_data=hash)
+        else:
+            return render_template('page_md5.html', message=message, hash=hash['hash'])
 
     # else:
     #   return render_template('page_md5.html', error_no='1')

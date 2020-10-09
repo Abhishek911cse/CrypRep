@@ -19,9 +19,9 @@
                     <input class="form-control" value="{{ message if message else 'ABCD' }}" name="message" >
                 </div>
             </div>
-            <!-- <div class="radio">
+            <div class="radio">
                 <label><input type="radio" name="action_options" value="all_steps" checked> Show All Steps</label>
-            </div> -->
+            </div>
             <div class="radio">
                 <label><input type="radio" name="action_options" value="no_steps"> Calculate Hash</label>
             </div>
@@ -36,7 +36,7 @@
             </div>
         </form>
         <br>
-        <!-- {% if show_all %}
+        {% if show_all %}
             <h4>Table 'T' (constants):</h4>
             <table class="table table-bordered">
                 {% for foo in range(0, operations_data.t_table|length, 8) %}
@@ -163,7 +163,7 @@
                 </tfoot>
             </table>
 
-        {% endif %} -->
+        {% endif %}
 
         {% if error_no=='1' %}
             <div class="col-lg-12 text-center mt-5">
