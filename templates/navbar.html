@@ -9,7 +9,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Cryptography examples
+                        Algorithms
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="/des/">DES</a>
@@ -21,25 +21,22 @@
 
                 {% if link == 'DES' %}
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url_for('static', filename='DES_Example_Description.pdf') }}" target="_blank" rel="noopener noreferrer">Description</a>
+                        <a class="nav-link js-scroll-trigger" href="https://en.wikipedia.org/wiki/Data_Encryption_Standard" target="_blank" rel="noopener noreferrer">More info</a>
                     </li>
                 {% elif link == 'AES' %}
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url_for('static', filename='AES_Example_Description.pdf') }}" target="_blank" rel="noopener noreferrer">Description</a>
+                        <a class="nav-link js-scroll-trigger" href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" rel="noopener noreferrer">More info</a>
                     </li>
                 {% elif link == 'RSA' %}
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url_for('static', filename='RSA_Example_Description.pdf') }}" target="_blank" rel="noopener noreferrer">Description</a>
+                        <a class="nav-link js-scroll-trigger" href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" target="_blank" rel="noopener noreferrer">More info</a>
                     </li>
                 {% elif link == 'MD5' %}
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url_for('static', filename='MD5_Example_Description.pdf') }}" target="_blank" rel="noopener noreferrer">Description</a>
+                        <a class="nav-link js-scroll-trigger" href="https://en.wikipedia.org/wiki/MD5" target="_blank" rel="noopener noreferrer">More info</a>
                     </li>
                 {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="https://github.com/EErikas/PythonCryptoExample" target="_blank" rel="noopener noreferrer">View code</a>
-                </li>
 
             </ul>
         </div>
