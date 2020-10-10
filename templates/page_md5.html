@@ -10,8 +10,8 @@
 
     <body id="page-top">
     <div class="container">
-        <h1 class="mt-5">MD5 algorithm example</h1>
-        <p class="lead">This is meant to be used as an educational tool not as actual encryption software</p>
+        <h1 class="mt-5">MD5 algorithm</h1>
+        <p class="lead">Enter the message to be hashed</p>
         <form action="/md5/" method="post">
             <div class="form-group row">
                 <label for="message" class="col-2 col-form-label">Message</label>
@@ -19,12 +19,12 @@
                     <input class="form-control" value="{{ message if message else 'ABCD' }}" name="message" >
                 </div>
             </div>
-            <div class="radio">
+            <!-- <div class="radio">
                 <label><input type="radio" name="action_options" value="all_steps" checked> Show All Steps</label>
-            </div>
-            <div class="radio">
+            </div> -->
+            <!-- <div class="radio">
                 <label><input type="radio" name="action_options" value="no_steps"> Calculate Hash</label>
-            </div>
+            </div> -->
             <div class="form-group row">
                 <label for="hash" class="col-2 col-form-label"><b>Hash:</b></label>
                 <div class="col-10">
@@ -36,8 +36,8 @@
             </div>
         </form>
         <br>
-        {% if show_all %}
-            <h4>Table 'T' (constants):</h4>
+        <!--{% if show_all %}
+             <h4>Table 'T' (constants):</h4>
             <table class="table table-bordered">
                 {% for foo in range(0, operations_data.t_table|length, 8) %}
                     <tr>
@@ -57,9 +57,9 @@
                         {% endfor %}
                     </tr>
                 {% endfor %}
-            </table>
+            </table> -->
 
-            <h4>Initial values (MDBUFFER):</h4>
+            <!-- <h4>Initial values (MDBUFFER):</h4>
             <table class="table table-bordered">
                 <tr>
                     <td>A:</td>
@@ -77,9 +77,9 @@
                     <td>D:</td>
                     <td>10325476</td>
                 </tr>
-            </table>
+            </table> -->
 
-            <h4>Message Blocks:</h4>
+            <!-- <h4>Message Blocks:</h4>
             <table class="table table-bordered">
                 <tr>
                     <td>Original Length:</td>
@@ -95,8 +95,8 @@
                     <td>Number of Blocks:</td>
                     <td colspan="2">{{ (operations_data.length_after_padding/64)|int }}</td>
                 </tr>
-            </table>
-            {% for foo in range(operations_data.message_blocks_hex|length) %}
+            </table> -->
+            <!-- {% for foo in range(operations_data.message_blocks_hex|length) %}
                 <table class="table table-bordered">
                     <thead class="thead-dark">
                     <tr>
@@ -120,10 +120,10 @@
 
                     </tbody>
                 </table>
-            {% endfor %}
-            <h4>MD5 Operations:</h4>
-            <table class="table table-bordered">
-                {% for foo in range(operations_data.operations|length) %}
+            {% endfor %} -->
+            <!-- <h4>MD5 Operations:</h4>
+            <table class="table table-bordered"> -->
+                <!-- {% for foo in range(operations_data.operations|length) %}
 
                     <thead class="thead-dark">
                     <tr>
@@ -154,7 +154,7 @@
                     </tr>
                     {% endfor %}
                     </tbody>
-                {% endfor %}
+                {% endfor %} 
                 <tfoot class="table-success">
                 <tr>
                     <td><b>Hash:</b></td>
@@ -163,7 +163,7 @@
                 </tfoot>
             </table>
 
-        {% endif %}
+        {% endif %}-->
 
         {% if error_no=='1' %}
             <div class="col-lg-12 text-center mt-5">

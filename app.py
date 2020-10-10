@@ -167,20 +167,22 @@ def rsa_page():
 
 @app.route('/md5/', methods=['POST', 'GET'])
 def md5_page():
+    
     if request.method == 'POST':
         message = request.form['message']
-        action = request.form['action_options']
+        # no action when not need
+        # action = request.form['action_options']
 
         # Errors:
         # 1 - empty value
 
         # if message is not None:
         hash = MD5().get_md5_hash(message)
-        if action == 'all_steps':
-            return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
-                                   operations_data=hash)
-        else:
-            return render_template('page_md5.html', message=message, hash=hash['hash'])
+        # if action == 'all_steps':
+        #     return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
+        #                            operations_data=hash)
+        # else:
+        return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=False, operations_data=hash)
 
     # else:
     #   return render_template('page_md5.html', error_no='1')
