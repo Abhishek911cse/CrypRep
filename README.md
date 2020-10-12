@@ -3,5 +3,5 @@
 Contributors:
 - Atharva Girish 
 - Siddarth Gandhi
-- Srishti Lodha
-- Vaishnav Srinidhi
+- Srishti V
+- Vaishnavi Srinidhi
