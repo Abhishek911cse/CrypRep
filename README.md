@@ -2,6 +2,6 @@
 
 ## Contributors:
 - Atharva Girish Ramgirkar
-- Siddarth Sanjay Gandhi
+- Siddharth Sanjay Gandhi
 - Srishti V
 - Vaishnav Srinidhi
