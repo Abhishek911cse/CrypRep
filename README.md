@@ -1,7 +1,7 @@
 # CrypRep
 
-Contributors:
-- Atharva Girish 
-- Siddarth Gandhi
+## Contributors:
+- Atharva Girish Ramgirkar
+- Siddarth Sanjay Gandhi
 - Srishti V
-- Vaishnavi Srinidhi
+- Vaishnav Srinidhi
