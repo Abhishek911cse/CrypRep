@@ -14,7 +14,11 @@
     <script src={{ url_for('static', filename='js/jquery.min.js') }}></script>
     <script src={{ url_for('static', filename='js/popper.min.js') }}></script>
     <script src={{ url_for('static', filename='js/bootstrap.min.js') }}></script>
-
+    <style>
+        html * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+        }
+    </style>
 
 </head>
 <body>
@@ -23,22 +27,22 @@
         <div class="row">
             <div class="col-lg-9 mx-auto">
                 <h1>
-                    Popular encryption/ hashing algorithms
+                    CrypRep
                 </h1>
                 <hr>
             </div>
             <div class="col-lg-10 mx-auto">
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/aes/">AES Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/aes/">AES Algorithm</a>
                 <br><br>
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/des/">DES Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/des/">DES Algorithm</a>
                 <br><br>
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/md5/">MD5 Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/md5/">MD5 Algorithm</a>
                 <br><br>
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/rsa/">RSA Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/rsa/">RSA Algorithm</a>
                 <br><br>
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/rsa/">SHA Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/rsa/">SHA Algorithm</a>
                 <br><br>
-                <a class="btn btn-primary btn-l js-scroll-trigger" href="/rsa/">Elgammel Algorithm</a>
+                <a class="btn btn-success btn-l js-scroll-trigger" href="/rsa/">ElGamal Algorithm</a>
             </div>
 
         </div>
