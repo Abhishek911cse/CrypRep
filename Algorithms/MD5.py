@@ -1,6 +1,3 @@
-'''
-Based on: https://rosettacode.org/wiki/MD5/Implementation#Python
-'''
 import math
 
 
