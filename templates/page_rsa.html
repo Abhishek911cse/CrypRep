@@ -50,7 +50,7 @@
             </div>
             -->
             <div class="radio">
-                <label><input type="radio" name="action_options" value="both" checked> Encrypt</label>
+                <label><input type="radio" name="action_options" value="both" checked> Encrypt and Decrypt</label>
             </div>
             <br>
             <div class="col-lg-10">
@@ -106,7 +106,7 @@
 
                 {% endif %}
 
-                <!-- {% if rsa.d %}
+                {% if rsa.d %}
 
                     <tr class="table-secondary">
                         <td>D:</td>
@@ -120,7 +120,7 @@
                         <td><b>{{ rsa.message }}</b></td>
                     </tr>
 
-                {% endif %} -->
+                {% endif %} 
             </table>
         {% endif %}
     </div>
