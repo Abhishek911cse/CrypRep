@@ -171,18 +171,18 @@ def md5_page():
     if request.method == 'POST':
         message = request.form['message']
         # no action when not need
-        # action = request.form['action_options']
+        action = request.form['action_options']
 
         # Errors:
         # 1 - empty value
 
         # if message is not None:
         hash = MD5().get_md5_hash(message)
-        # if action == 'all_steps':
-        #     return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
-        #                            operations_data=hash)
-        # else:
-        return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=False, operations_data=hash)
+        if action == 'all_steps':
+            return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=True,
+                                   operations_data=hash)
+        else:
+            return render_template('page_md5.html', message=message, hash=hash['hash'], show_all=False, operations_data=hash)
 
     # else:
     #   return render_template('page_md5.html', error_no='1')

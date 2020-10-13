@@ -19,9 +19,9 @@
                     <input class="form-control" value="{{ message if message else 'ABCD' }}" name="message" >
                 </div>
             </div>
-            <!-- <div class="radio">
+            <div class="radio">
                 <label><input type="radio" name="action_options" value="all_steps" checked> Show All Steps</label>
-            </div> -->
+            </div>
             <!-- <div class="radio">
                 <label><input type="radio" name="action_options" value="no_steps"> Calculate Hash</label>
             </div> -->
@@ -36,7 +36,7 @@
             </div>
         </form>
         <br>
-        <!--{% if show_all %}
+        <!-- {% if show_all %}
              <h4>Table 'T' (constants):</h4>
             <table class="table table-bordered">
                 {% for foo in range(0, operations_data.t_table|length, 8) %}
@@ -58,8 +58,8 @@
                     </tr>
                 {% endfor %}
             </table> -->
-
-            <!-- <h4>Initial values (MDBUFFER):</h4>
+            <!-- Usure, buggy-->
+            <h4>Initial values (MDBUFFER):</h4>
             <table class="table table-bordered">
                 <tr>
                     <td>A:</td>
@@ -77,9 +77,9 @@
                     <td>D:</td>
                     <td>10325476</td>
                 </tr>
-            </table> -->
+            </table>
 
-            <!-- <h4>Message Blocks:</h4>
+            <h4>Message Blocks:</h4>
             <table class="table table-bordered">
                 <tr>
                     <td>Original Length:</td>
@@ -95,8 +95,8 @@
                     <td>Number of Blocks:</td>
                     <td colspan="2">{{ (operations_data.length_after_padding/64)|int }}</td>
                 </tr>
-            </table> -->
-            <!-- {% for foo in range(operations_data.message_blocks_hex|length) %}
+            </table>
+            {% for foo in range(operations_data.message_blocks_hex|length) %}
                 <table class="table table-bordered">
                     <thead class="thead-dark">
                     <tr>
@@ -120,7 +120,7 @@
 
                     </tbody>
                 </table>
-            {% endfor %} -->
+            {% endfor %}
             <!-- <h4>MD5 Operations:</h4>
             <table class="table table-bordered"> -->
                 <!-- {% for foo in range(operations_data.operations|length) %}
